@@ -27,5 +27,5 @@ jobs:
 
         DOCKER_IMAGE_NAME="docker.pkg.github.com/$GITHUB_REPOSITORY/$(basename $GITHUB_REPOSITORY):$DOCKER_IMAGE_TAG"
 
-        docker build -f deploy/Dockerfile -t $DOCKER_IMAGE_NAME .
+        docker build -f docker/Dockerfile -t $DOCKER_IMAGE_NAME .
         docker push $DOCKER_IMAGE_NAME
