@@ -17,4 +17,4 @@ jobs:
       run: docker build -t "docker.pkg.github.com/kiwibrowser/docker_image/build:latest" -f docker/Dockerfile docker/
 
     - name: Pushing image
-      run: docker push build 
+      run: docker push kiwibrowser/docker_image/build:latest 
