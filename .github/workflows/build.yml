@@ -14,7 +14,18 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Building and tagging image
-      run: docker build -t "docker.pkg.github.com/kiwibrowser/docker_image/build:latest" -f docker/Dockerfile docker/
+      run: |
+        GIT_TAG="${GITHUB_REF##refs/tags/}"
+        GIT_BRANCH="${GITHUB_REF##refs/heads/}"
 
-    - name: Pushing image
-      run: docker push kiwibrowser/docker_image/build:latest 
+        if [[ $GITHUB_REF != $GIT_TAG ]]; then
+          # Use Git Tag as Docker Image Tag, so that it's connected to the corresponding GitHub release
+          DOCKER_IMAGE_TAG="$GIT_TAG"
+        else
+          DOCKER_IMAGE_TAG="$(echo $GIT_BRANCH | tr / -)"
+        fi
+
+        DOCKER_IMAGE_NAME="docker.pkg.github.com/$GITHUB_REPOSITORY/$(basename $GITHUB_REPOSITORY):$DOCKER_IMAGE_TAG"
+
+        docker build -f deploy/Dockerfile -t $DOCKER_IMAGE_NAME .
+        docker push $DOCKER_IMAGE_NAME
