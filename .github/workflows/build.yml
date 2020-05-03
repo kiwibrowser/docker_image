@@ -1,0 +1,17 @@
+name: Building Docker image
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Building and tagging image
+      run: docker build -t "docker.pkg.github.com/$GITHUB_REPOSITORY/ubuntu:latest" -f docker/Dockerfile docker/
