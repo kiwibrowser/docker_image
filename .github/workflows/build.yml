@@ -15,3 +15,6 @@ jobs:
 
     - name: Building and tagging image
       run: docker build -t "docker.pkg.github.com/$GITHUB_REPOSITORY/ubuntu:latest" -f docker/Dockerfile docker/
+
+    - name: Pushing image
+      run: docker push $DOCKER_IMAGE_NAME
