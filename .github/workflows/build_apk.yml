@@ -33,7 +33,7 @@ jobs:
           sudo df -h
 
       - name: Displaying disk usage
-        run: sudo du -csh /* || true
+        run: sudo du -csh /imagegeneration/* || true
 
       - name: Reclaiming disk space on / by removing .NET framework
         run: sudo rm -rf /usr/share/dotnet
