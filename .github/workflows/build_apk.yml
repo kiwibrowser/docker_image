@@ -1,0 +1,45 @@
+# Build APKs for Kiwi Browser
+name: build apk
+
+# Controls when the action will run. Triggers the workflow on push or pull request events
+on:
+  workflow_dispatch:
+    inputs:
+      prepareRelease:
+        description: 'Create a draft release in Google Play Store'     
+        required: true
+        default: 'no'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+    
+    # The GitHub Actions machines have a "slow disk", and a SSD "fast" disk.
+    # However, there is not enough space to do all the processing on the SSD.
+    
+    # We refer to the disks based on their name in /dev/disk
+    # /dev/disk/azure/root-part1 is / ("slow disk")
+    # /dev/disk/azure/resource-part1 is a 14 GB ephemeral SSD disk mounted in /mnt
+
+    # We store the source-code repository (kiwibrowser/src) on /dev/disk/azure/root-part1
+    # We store cache, dependencies and output on /dev/disk/azure/resource-part1 (SSD)
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Initializing build
+        run: echo Initializing build for platform ${{ matrix.platform }}
+
+      - name: Reclaiming disk space on / by disabling swap partition
+        run: |
+          sudo swapoff -av
+          sudo rm -f /swapfile
+          sudo du -csh
+
+      - name: Reclaiming disk space on / by removing .NET framework
+        run: sudo rm -rf /usr/share/dotnet
+
+      - name: Displaying disk space
+        run: |
+          sudo du -csh
