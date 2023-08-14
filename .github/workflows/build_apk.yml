@@ -30,10 +30,13 @@ jobs:
         run: |
           sudo swapoff -av
           sudo rm -f /swapfile
-          sudo du -csh /
+          sudo df -h
+
+      - name: Displaying disk usage
+        run: sudo du -csh /* || true
 
       - name: Reclaiming disk space on / by removing .NET framework
         run: sudo rm -rf /usr/share/dotnet
 
       - name: Displaying disk space
-        run: sudo du -csh /
+        run: sudo df -h
